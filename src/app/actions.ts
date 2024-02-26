@@ -7,7 +7,7 @@ import fsPromises from "fs/promises";
 
 const PATH_TMP = "public/tmp.txt";
 
-const fileProcess = async () => {
+const fileProcess = async (uploadtime: number) => {
   let counter = 0;
   let minVal = 0;
   let maxVal = 0;
@@ -98,6 +98,7 @@ const fileProcess = async () => {
             ? tempIncrSequence
             : incrSequence,
         time: endTime - startTime,
+        uploadtime,
       };
       return { ...rezult };
     })
@@ -109,11 +110,14 @@ const fileProcess = async () => {
 };
 
 export async function processFile(prevState: IResult, formData: FormData) {
+  const startUploadTime = performance.now();
   const dataFile = formData.get("file") as File;
   const bytes = await dataFile.arrayBuffer();
   const buffer = Buffer.from(bytes);
   await fsPromises.writeFile(PATH_TMP, buffer);
-  const result = await fileProcess();
+  const stopUploadTime = performance.now();
+  const result = await fileProcess(stopUploadTime - startUploadTime);
+
   revalidatePath("/");
   return result as IResult;
 }
