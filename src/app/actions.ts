@@ -4,8 +4,10 @@ import { revalidatePath } from "next/cache";
 import fs from "node:fs"; //fs
 import readline from "readline";
 import fsPromises from "fs/promises";
+import { headers } from "next/headers";
+import path from "node:path";
 
-const PATH_TMP = "public/tmp.txt";
+const PATH_TMP = "tmp/tmp.txt";
 
 const fileProcess = async (uploadtime: number) => {
   let counter = 0;
@@ -76,8 +78,7 @@ const fileProcess = async (uploadtime: number) => {
     return res;
   };
 
-  const filepath = PATH_TMP;
-
+  const filepath = path.join(process.cwd() + "/public", "/tmp.txt");
   const res = fileToArray(filepath)
     .then((state) => {
       const endTime = performance.now();
@@ -114,7 +115,12 @@ export async function processFile(prevState: IResult, formData: FormData) {
   const dataFile = formData.get("file") as File;
   const bytes = await dataFile.arrayBuffer();
   const buffer = Buffer.from(bytes);
-  await fsPromises.writeFile(PATH_TMP, buffer);
+  const headersList = headers();
+  const requestUrl = headersList.get("next-url");
+  console.log(requestUrl);
+  const content = Date.now().toString();
+
+  fs.writeFileSync(path.join(process.cwd() + "/public", "/tmp.txt"), buffer);
   const stopUploadTime = performance.now();
   const result = await fileProcess(stopUploadTime - startUploadTime);
 
