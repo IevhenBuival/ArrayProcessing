@@ -78,7 +78,7 @@ const fileProcess = async (uploadtime: number) => {
     return res;
   };
 
-  const filepath = path.join(process.cwd() + "/public", "/tmp.txt");
+  const filepath = process.cwd() + "/my.txt";
   const res = fileToArray(filepath)
     .then((state) => {
       const endTime = performance.now();
@@ -115,12 +115,11 @@ export async function processFile(prevState: IResult, formData: FormData) {
   const dataFile = formData.get("file") as File;
   const bytes = await dataFile.arrayBuffer();
   const buffer = Buffer.from(bytes);
-  const headersList = headers();
-  const requestUrl = headersList.get("next-url");
-  console.log(requestUrl);
-  const content = Date.now().toString();
 
-  fs.writeFileSync(path.join(process.cwd() + "/public", "/tmp.txt"), buffer);
+  console.log(process.cwd());
+
+  //process.cwd() + '/app/data.json'
+  fs.writeFileSync(process.cwd() + "/my.txt", buffer);
   const stopUploadTime = performance.now();
   const result = await fileProcess(stopUploadTime - startUploadTime);
 
