@@ -1,6 +1,11 @@
 "use client";
 import React, { ChangeEvent } from "react";
-export default function UploadInput() {
+
+interface IUploadInput {
+  inputRef: React.MutableRefObject<HTMLInputElement | null>;
+}
+
+export default function UploadInput({ inputRef }: IUploadInput) {
   const loadPreview = (file: File) => {
     if (file.type.toString() !== "text/plain") {
       throw new Error("File type mismatch");
@@ -22,6 +27,7 @@ export default function UploadInput() {
         multiple={false}
         onChange={handleChange}
         accept="*.txt"
+        ref={inputRef}
       />
     </div>
   );

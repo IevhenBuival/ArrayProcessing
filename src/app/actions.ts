@@ -3,11 +3,11 @@ import { IResult } from "@/types/IResult";
 import { revalidatePath } from "next/cache";
 import fs from "node:fs"; //fs
 import readline from "readline";
-import streamBuffers from "stream-buffers";
+
 import { writeFile } from "fs/promises";
-import { headers } from "next/headers";
-import path, { join } from "path";
-import { StringDecoder } from "node:string_decoder";
+
+import { join } from "path";
+import { getMediana, updateSequencesByCondition } from "@/utils/arrayProcess";
 
 const PATH_TMP = "tmp/tmp.txt";
 
@@ -112,46 +112,12 @@ const fileProcess = async (uploadtime: number, filename: string) => {
   return res;
 };
 
-const sequencesTransformByCondition = (
-  condition: boolean,
-  temp: number[],
-  current: number[]
-) => {
-  if (temp.length !== 0 && condition) {
-    if (temp.length > current.length) {
-      current.splice(0, current.length, ...temp);
-    }
-    temp.splice(0, temp.length);
-  }
-};
-
-const updateSequencesByCondition = (
-  condition: boolean,
-  newVal: number,
-  tempSequence: number[],
-  baseSequence: number[]
-) => {
-  sequencesTransformByCondition(condition, tempSequence, baseSequence);
-  tempSequence.push(newVal);
-};
-
-const getMediana = (arrayVal: number[]) => {
-  if (arrayVal.length === 2) return (arrayVal[0] + arrayVal[1]) / 2;
-  if (arrayVal.length === 1) return arrayVal[0];
-
-  arrayVal.sort();
-
-  return arrayVal.length % 2 === 0
-    ? (arrayVal[arrayVal.length / 2 - 1] + arrayVal[arrayVal.length / 2]) / 2
-    : arrayVal[arrayVal.length / 2 - (arrayVal.length % 2) / 2];
-};
-
 async function bufferProcess(dataFile: File, uploadtime: number) {
   const bytes = await dataFile.arrayBuffer();
   const buffer = Buffer.from(bytes);
   console.log(buffer);
   const input = fs.createReadStream(buffer);
-  console.log(input);
+
   let counter = 0;
   let minVal = 0;
   let maxVal = 0;
@@ -233,53 +199,18 @@ export async function processFile(prevState: IResult, formData: FormData) {
   if (!file) {
     throw new Error("No file uploaded");
   }
+  const startUploadTime = performance.now();
 
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);
 
-  // With the file data in the buffer, you can do whatever you want with it.
-  // For this, we'll just write it to the filesystem in a new location
   const path = join("/", "tmp", file.name);
   await writeFile(path, buffer);
-  console.log(`open ${path} to see the uploaded file`);
 
-  const startUploadTime = performance.now();
-
-  //fs.writeFileSync(__dirname + "/public/my.txt", buffer);
-
-  /*const decoder = new StringDecoder(buffer.writeFloatBE);
-
-  const input = fs.createReadStream(__dirname + "/public/my.txt");
-  console.log(input);
-  revalidatePath("/");
-  return { status: "ok", uploadtime: 10 };
-
-  const rl = readline.createInterface({
-    input,
-    crlfDelay: Infinity,
-  });
-  rl.on("line", (line: string) => {
-    console.log(line);
-  });
-
-  const blob = new Blob([bytes]);
-  const stream = blob.stream();
-
-  
-*/
-  /*const result = await bufferProcess(
-    dataFile,
-    stopUploadTime - startUploadTime
-  );*/
-
-  //process.cwd() + '/app/data.json'
-  //fs.writeFileSync(process.cwd() + "/my.txt", buffer);
-  //__dirname + '/public
-  //return { status: "ok" };
   const stopUploadTime = performance.now();
   const result = await fileProcess(stopUploadTime - startUploadTime, file.name);
 
   revalidatePath("/");
-  //return { status: "ok", uploadtime: 10 } as unknown as IResult;
+
   return result as IResult;
 }

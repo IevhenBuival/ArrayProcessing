@@ -10,8 +10,8 @@ export default function ProcessButton() {
       type="submit"
       className="px-3 my-1 border-2 border-white rounded-sm"
     >
-      <p className="font-mono font-bold">
-        {pending ? "Processing..." : "  Process  "}
+      <p className="font-mono font-bold w-60">
+        {pending ? "Processing on Server..." : "  Process on Server "}
       </p>
     </button>
   );

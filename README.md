@@ -1,8 +1,43 @@
+# Array processing
+
+This test task for calculations maximum, minimum, median, average, longest growing sequence, longest decreasing sequence.
+You can process your unzipped file with strings of number(one number in line separated by '\n').
+
+File format txt (utf-8, in each string line one number) example:
+
+```bash
+more tmp.txt
+#result:
+1211212
+5
+-45454
+55
+55665
+
+```
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+## Link to deploy on Vercel
 
-First, run the development server:
+[Link to deployed application https://array-processing.vercel.app/](https://array-processing.vercel.app/)
+
+You may process large files by Process on Client button.
+And short files can try by Process on Server just for fun.
+
+If you want try process by server method you should deploy this project or use dev server becouse versel have limit for temp files.
+
+## Getting Started on Dev server
+
+First, clone this GitHub repository then start:
+
+```bash
+npm install
+# or
+yarn add
+```
+
+Then run the development server:
 
 ```bash
 npm run dev
@@ -15,22 +50,3 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

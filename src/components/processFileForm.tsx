@@ -7,8 +7,12 @@ import { processFile } from "@/app/actions";
 import UploadInput from "./uploadInput";
 import ProcessButton from "./processButton";
 
+import { useRef } from "react";
+import ClientProcessSection from "./clientProcessSection";
+
 const initialState: IResult = { state: "init" };
 export default function ProcessFileForm() {
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const [state, formAction] = useFormState(processFile, initialState);
   return (
     <form action={formAction}>
@@ -21,10 +25,14 @@ export default function ProcessFileForm() {
         <li className="">2. Press Process button</li>
       </ul>
 
-      <UploadInput />
-      <ProcessButton />
-
-      <ResultBox state={state} />
+      <UploadInput inputRef={inputRef} />
+      <div className="lg:flex mt-2">
+        <ClientProcessSection inputRef={inputRef} />
+        <div className="basis-1/2">
+          <ProcessButton />
+          <ResultBox state={state} />
+        </div>
+      </div>
     </form>
   );
 }
