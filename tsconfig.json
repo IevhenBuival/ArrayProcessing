@@ -26,9 +26,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "./libs/*src/**/*",
-    "src/lib/bit_iterator.js",
-    "src/lib/bzip2.js"
+    "./libs/*src/**/*"
   ],
   "exclude": ["node_modules"]
 }

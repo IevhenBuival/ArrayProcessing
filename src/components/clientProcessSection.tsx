@@ -28,7 +28,7 @@ const localFileProcess = async (
       throw new Error("cant read file");
     };
     reader.readAsText(file);
-  }
+  } else callback({ state: "empty file" });
 };
 
 interface IClientProcessButton {
@@ -50,11 +50,8 @@ export default function ClientProcessSection({
           setPending(true);
           if (inputRef.current !== null)
             localFileProcess(inputRef.current, (result) => {
-              console.log("start");
-
               setRez(result);
               setPending(false);
-              console.log("end");
             });
         }}
       >
